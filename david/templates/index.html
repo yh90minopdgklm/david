@@ -1,6 +1,7 @@
+<img src="{{ url_for('static', filename='david.jpg') }}">
 <form method="POST">
   <label>이름 또는 문장을 입력하세요:</label>
-  <input type="text" name="input_text" required="">
+  <input type="text" name="input_text">
   
   <label>언어 선택:</label>
   <select name="lang">
@@ -8,6 +9,7 @@
     <option value="en">영어</option>
     <option value="ja">일본어</option>
     <option value="es">스페인어</option>
+    <option value="???">오류 예제</option>
   </select>
 
   <button type="submit">음성 듣기</button>
@@ -21,4 +23,7 @@
   <audio controls="" autoplay="">
     <source src="data:audio/mpeg;base64,{{ audio }}">
   </audio>
+  <a href="{{ download_url }}" download="output.mp3">
+    output.mp3
+  </a>
 {% endif %}

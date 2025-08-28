@@ -61,5 +61,9 @@ def home():
     else:
         return render_template('index.html', error=None, audio=None)
 
+@app.route('/menu')
+def menu():
+    return render_template('menu.html')
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)

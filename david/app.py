@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, Response
-import os, base64
+import os, base64, socket
 from io import BytesIO
 from gtts import gTTS
 from werkzeug.exceptions import BadRequest
@@ -24,6 +24,10 @@ def log_input(text, lang, error=None):
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    if app.debug:
+        hostname = '컴퓨터(인스턴스) : ' + socket.gethostname()
+    else:
+        hostname = ' '
     if request.method == 'POST':
         try:
             # 폼 데이터 유효성 검사
@@ -47,23 +51,24 @@ def home():
             return render_template('index.html',
                                    error=None,
                                    audio=audio_base64,
-                                   download_url=f"data:audio/mpeg;base64,{audio_base64}")
+                                   download_url=f"data:audio/mpeg;base64,{audio_base64}",
+                                   computername=hostname)
         
         except ValueError as e:
             log_input(request.form.get('input_text', ''), request.form.get('lang', DEFAULT_LANG), str(e))
-            return render_template('index.html', error=str(e), audio=None)
+            return render_template('index.html', error=str(e), audio=None, computername=hostname)
         except BadRequest as e:
             log_input(request.form.get('input_text', ''), request.form.get('lang', DEFAULT_LANG), str(e))
-            return render_template('index.html', error=str(e), audio=None)
+            return render_template('index.html', error=str(e), audio=None, computername=hostname)
         except Exception as e:
             log_input(request.form.get('input_text', ''), request.form.get('lang', DEFAULT_LANG), str(e))
-            return render_template('index.html', error="오디오 변환이 실패했습니다.", audio=None)
+            return render_template('index.html', error="오디오 변환이 실패했습니다.", audio=None, computername=hostname)
     else:
-        return render_template('index.html', error=None, audio=None)
+        return render_template('index.html', error=None, audio=None, computername=hostname)
 
 @app.route('/menu')
 def menu():
     return render_template('menu.html')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=8080, debug=True)

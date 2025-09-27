@@ -69,18 +69,10 @@ def home():
 @app.route('/menu')
 def menu():
     return render_template('menu.html')
-<<<<<< HEAD
 
 @app.route("/test1")
 def test1():
     return render_template('test1.html')
 
-=======
-    
-@app.route("/test2")
-def test2():
-    return render_template('test2.html')
-    
->>>>>> 54905c8ad502d78aa5f20a11aa9106cf604a9918
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
